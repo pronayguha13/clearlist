@@ -52,6 +52,13 @@
   --color-icon-inactive: #888888;
   --color-background-secondary: #F8F8F8;
   --color-background-subtle: #F8F8FB;
+
+  /* typography */
+  --thin: 300;
+  --normal: 400;
+  --medium: 500;
+  --semi-bold: 600;
+  --bold: 700;
 }
 
 * {
@@ -75,5 +82,5 @@ body {
   width: 100%;
   height: 100%;
   display: flex;
-  flex-direction:column;
+  flex-direction: column;
 }

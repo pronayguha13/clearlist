@@ -1,0 +1,22 @@
+.container {
+    height: 100%;
+    padding: 2rem 1rem 0 0;
+
+
+    & .center {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        padding-top: 1rem;
+
+        &>* {
+            flex: 1;
+        }
+
+        & .right {
+            display: flex;
+            flex-direction: column;
+
+        }
+    }
+}

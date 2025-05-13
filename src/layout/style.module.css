@@ -11,9 +11,12 @@
         gap: 1rem;
         padding: 1rem 0;
 
+        .left {
+            flex: 1;
+        }
 
         & .content {
-            flex: 1;
+            flex: 2;
             padding: 0 2rem;
             padding-bottom: 0;
         }
