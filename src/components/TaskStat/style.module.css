@@ -1,0 +1,31 @@
+.circle_container {
+    --task-status-color: var(--status-color, #00ff00);
+    padding: 4px;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+
+
+
+    .status_infocontainer {
+        padding: 0.5rem;
+        width: 100%;
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-start;
+        align-items: center;
+        gap: 0.5rem;
+
+        & .status_icon {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: var(--task-status-color);
+        }
+
+        & .status_text {
+            font-size: 15px;
+            font-weight: var(--medium);
+        }
+    }
+}
