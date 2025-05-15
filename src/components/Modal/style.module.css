@@ -1,0 +1,54 @@
+.backdrop {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(0, 0, 0, 74%);
+
+    .modal {
+        width: 60%;
+        height: 80%;
+        background-color: var(--color-background-secondary);
+        padding: 2rem 3rem;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        gap: 2rem;
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+            & .title {
+                font-weight: var(--semi-bold);
+            }
+
+            & .go_back {
+                border: none;
+                outline: none;
+                cursor: pointer;
+                background-color: transparent;
+                font-weight: var(--semibold);
+                font-size: 14px;
+            }
+
+        }
+
+        & .content {
+            border: 1px solid var(--color-text-secondary);
+            padding: 1rem;
+            flex: 1;
+            overflow-y: auto;
+        }
+
+        & .footer {
+            display: flex;
+            gap: 1rem;
+        }
+    }
+}

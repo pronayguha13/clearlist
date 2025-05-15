@@ -1,16 +1,97 @@
 .container {
     height: 100%;
-    padding: 2rem 1rem 0 0;
+    display: flex;
+    flex-direction: column;
+    padding-top: 2rem;
 
 
     & .center {
+        flex: 1;
         display: flex;
-        flex-direction: row;
         justify-content: space-between;
-        padding-top: 1rem;
+        padding: 1rem 2rem;
+        gap: 2rem;
+        box-shadow: 0 4px 6px 0px #747474;
 
         &>* {
             flex: 1;
+        }
+
+        & .left {
+            padding: 0.5rem 0;
+            border-radius: 1rem;
+            box-shadow: 0 6px 6px 0px #888888;
+            display: flex;
+            flex-direction: column;
+
+
+            &>div {
+                padding: 0 2rem;
+            }
+
+            & .header {
+                flex: 1;
+                display: flex;
+                flex-direction: column;
+                justify-content: space-between;
+                align-items: flex-start;
+                gap: 0.5rem;
+                padding-bottom: 1rem;
+                align-items: center;
+
+                & .main_header {
+                    width: 100%;
+                    display: flex;
+                    justify-content: space-between;
+
+                    & .heading_container {
+                        display: flex;
+                        align-items: center;
+                        gap: 0.5rem;
+
+                        & .heading {
+                            color: var(--color-brand-primary)
+                        }
+                    }
+
+                    & .addtask_container {
+                        display: flex;
+                        align-items: center;
+                        cursor: pointer;
+
+                        & label {
+                            color: var(--color-text-secondary);
+                            font-size: 12px;
+                            cursor: pointer;
+                        }
+                    }
+                }
+
+                & .sub_header {
+                    width: 100%;
+                }
+            }
+
+
+
+            .todays_task {
+                overflow-y: auto;
+                flex: 2;
+                display: flex;
+                flex-direction: column;
+                gap: 0.5rem;
+                padding-bottom: 1rem;
+            }
+
+            .separator {
+                border: 1px solid var(--color-text-secondary);
+                opacity: 41%;
+            }
+
+            & .priority_task {
+                flex: 1;
+                
+            }
         }
 
         & .right {

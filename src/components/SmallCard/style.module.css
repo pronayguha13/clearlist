@@ -1,0 +1,101 @@
+.wrapper {
+    /* padding: 1rem 1.5rem; */
+    border: 1px solid var(--color-text-secondary);
+    border-radius: 1rem;
+    display: flex;
+    flex-direction: column;
+
+    & .header {
+        width: 100%;
+        display: flex;
+        flex-direction: row-reverse;
+        align-items: center;
+
+        & .three_dot {
+            padding: 0.5rem;
+            display: flex;
+            gap: 0.25rem;
+            cursor: pointer;
+
+            & .dot {
+                border-radius: 50%;
+                width: 0.25rem;
+                height: 0.25rem;
+                border: 1px solid var(--color-text-secondary);
+            }
+        }
+    }
+
+
+    & .content {
+        width: 100%;
+        padding: 0.5rem 1rem;
+        display: flex;
+        gap: 0.5rem;
+
+        & .radiobtn_container {
+            padding-top: 6px;
+
+            & input[type="radio"] {
+                appearance: none;
+                visibility: hidden;
+            }
+
+            & .mock_radioinput {
+                height: 1rem;
+                width: 1rem;
+                border: 1px solid var(--color-text-secondary);
+                border-radius: 50%;
+                cursor: pointer;
+            }
+        }
+
+        & .center_content {
+            flex: 2;
+            display: flex;
+            flex-direction: column;
+
+            & .title {
+                vertical-align: baseline;
+                font-weight: var(--semi-bold);
+                font-size: 1rem;
+            }
+
+            & .description {
+                font-weight: var(--normal);
+                font-size: 14px;
+                color: var(--color-text-muted);
+                text-overflow: ellipsis;
+            }
+        }
+
+
+        & img {
+            height: 6rem;
+            width: 6rem;
+            border-radius: 1rem;
+        }
+    }
+
+    & .footer {
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-end;
+        align-items: center;
+        padding-bottom: 0.5rem;
+        padding-right: 1rem;
+        gap: 1.5rem;
+
+
+        & .status,
+        & .priority {
+            display: flex;
+            gap: 0.25rem;
+        }
+
+
+        & span:last-of-type {
+            color: var(--color-text-secondary)
+        }
+    }
+}

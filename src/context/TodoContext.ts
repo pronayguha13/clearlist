@@ -1,18 +1,21 @@
 import { createContext, useContext } from "react";
 import type { ITODO } from "../types";
+import type { DatabaseReference } from "firebase/database";
 
 export type TODOContextType = {
   todos: Array<ITODO>;
   completedTODOs: Array<ITODO>;
-  create: (title: string, description: string) => void;
+  create: (todo: ITODO) => Promise<DatabaseReference>;
   delete: (id: string) => void;
 };
 
 const defaultState: TODOContextType = {
   todos: [],
   completedTODOs: [],
-  create: () => {},
-  delete: () => {},
+  create: () => {
+    throw new Error("Create method is not yet implemented")
+  },
+  delete: () => { },
 };
 
 const TodoContext = createContext(defaultState);
