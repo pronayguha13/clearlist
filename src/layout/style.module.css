@@ -14,6 +14,7 @@
 
         .left {
             flex: 1;
+            padding-top: 2rem;
         }
 
         & .content {
