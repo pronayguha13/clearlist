@@ -5,7 +5,7 @@
   font-optical-sizing: auto;
   font-style: normal;
 
-  color-scheme: light dark;
+  color-scheme: light;
   color: var(--color-text-primary);
   background-color: var(--color-background-subtle);
   font-synthesis: none;

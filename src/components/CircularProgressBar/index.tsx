@@ -3,7 +3,7 @@ import style from "./style.module.css";
 
 const CircularProgressBar = ({
   percentage = 75,
-  size = 200,
+  size = 120,
   strokeWidth = 15,
   circleColor = "#f0f0f0",
   progressColor = "#4caf50",
