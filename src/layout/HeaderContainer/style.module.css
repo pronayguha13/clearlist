@@ -1,0 +1,86 @@
+.container {
+    padding: 1.5rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 6rem;
+    box-shadow: 0 4px 12px 0 rgba(0, 0, 0, 0.07);
+
+    & .title {
+        flex: 1;
+        font-weight: var(--semi-bold);
+
+        & .firstPart {
+            color: var(--color-brand-primary);
+        }
+    }
+
+    & .search_container {
+        flex: 2;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 3rem;
+
+        & .search_input {
+            flex: 1;
+            height: 100%;
+            padding: 0.5rem;
+            border: none;
+            outline: none;
+            border-top-left-radius: 0.5rem;
+            border-bottom-left-radius: 0.5rem;
+            font-size: 1.5rem;
+            color: var(--color-text-muted);
+        }
+
+        & .search_button {
+            height: 100%;
+            padding: 0 1rem;
+            border: none;
+            outline: none;
+            border-radius: 0.5rem;
+            border-top-left-radius: 0;
+            border-bottom-left-radius: 0;
+            background-color: var(--color-brand-primary);
+            color: var(--color-background);
+            cursor: pointer;
+        }
+    }
+
+    & .extra_icon_container {
+        height: 3rem;
+        flex: 1;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        button {
+            height: 100%;
+            background-color: var(--color-brand-primary);
+            color: var(--color-background);
+            outline: none;
+            border: none;
+            border-radius: 0.5rem;
+            padding: 0.5rem 1rem;
+            cursor: pointer;
+        }
+
+        & .left {
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        & .todays_date {
+            display: flex;
+            flex-direction: column;
+
+            & p:last-of-type {
+                color: var(--color-chart-blue)
+            }
+        }
+    }
+}
