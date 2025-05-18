@@ -1,0 +1,33 @@
+.container {
+    height: 100%;
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+
+    & section {
+        flex: 1;
+        border: 1px solid var(--color-border-light);
+        border-radius: 1rem;
+        padding: 1rem;
+    }
+
+    .left {
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+
+        & .heading {
+            font-weight: var(--semi-bold);
+            font-size: 1rem;
+        }
+
+        & .tasks {
+            flex: 1;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+    }
+}

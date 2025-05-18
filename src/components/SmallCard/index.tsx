@@ -1,12 +1,13 @@
-import { useRef, type CSSProperties } from "react";
+import { useRef, type CSSProperties, type MouseEvent } from "react";
 import type { ITODO } from "../../types";
 import style from "./style.module.css";
 import dummyImage from "../../assets/pexels-1173285862-32039255.webp";
 
 type SmallCardProps = {
-  todo: ITODO;
+  todo: [string, ITODO];
+  onClick?: (todo: [string, ITODO]) => void;
 };
-const SmallCard = ({ todo }: SmallCardProps) => {
+const SmallCard = ({ todo, onClick }: SmallCardProps) => {
   const inputBtnRef = useRef(null);
 
   const getStatusColor = (status: string) => {
@@ -43,8 +44,20 @@ const SmallCard = ({ todo }: SmallCardProps) => {
     }
   };
 
+  const onSmallCardClick = (event: MouseEvent) => {
+    const composedPathEl = Array.from(event.nativeEvent.composedPath());
+    if (
+      !composedPathEl.find(
+        (el) => (el as HTMLElement).id === "radio-input-container"
+      ) &&
+      onClick
+    ) {
+      onClick(todo);
+    }
+  };
+
   return (
-    <div className={style.wrapper}>
+    <div className={style.wrapper} onClick={onSmallCardClick}>
       <div className={style.header}>
         <div className={style.three_dot}>
           <div className={style.dot}></div>
@@ -54,29 +67,30 @@ const SmallCard = ({ todo }: SmallCardProps) => {
       </div>
       <div className={style.content}>
         <div className={style.radiobtn_container}>
-          <div className={style.mock_radioinput}></div>
-          <input type="radio" ref={inputBtnRef} />
+          <div id="radio-input-container" className={style.mock_radioinput}>
+            <input type="radio" ref={inputBtnRef} />
+          </div>
         </div>
         <div className={style.center_content}>
-          <h3 className={style.title}>{todo.title}</h3>
-          <span className={style.description}>{todo.description}</span>
+          <h3 className={style.title}>{todo[1].title}</h3>
+          <span className={style.description}>{todo[1].description}</span>
         </div>
         <img src={dummyImage} alt="" />
       </div>
       <div className={style.footer}>
         <span className={style.priority}>
           Priority:{" "}
-          <p style={getPriorityColor(todo.priority) as CSSProperties}>
-            {todo.priority ?? "Low"}
+          <p style={getPriorityColor(todo[1].priority) as CSSProperties}>
+            {todo[1].priority ?? "Low"}
           </p>
         </span>
         <span className={style.status}>
           Status:{" "}
-          <p style={getStatusColor(todo.status) as CSSProperties}>
-            {todo.status ?? "Not started"}
+          <p style={getStatusColor(todo[1].status) as CSSProperties}>
+            {todo[1].status ?? "Not started"}
           </p>
         </span>
-        <span>Created on: {new Date().toDateString()}</span>
+        <span>Created on: {new Date().toLocaleDateString("en-GB")}</span>
       </div>
     </div>
   );

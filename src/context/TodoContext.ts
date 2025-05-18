@@ -3,10 +3,12 @@ import type { ITODO } from "../types";
 import type { DatabaseReference } from "firebase/database";
 
 export type TODOContextType = {
-  todos: Array<ITODO>;
-  completedTODOs: Array<ITODO>;
+  todos: Array<[string, ITODO]>;
+  completedTODOs: Array<[string, ITODO]>;
   create: (todo: ITODO) => Promise<DatabaseReference>;
-  delete: (id: string) => void;
+  deleteTODO: (id: string) => void;
+  getTodoByID: (id: number) => [string, ITODO]
+  getVitalTodos: () => Array<[string, ITODO]>
 };
 
 const defaultState: TODOContextType = {
@@ -15,7 +17,9 @@ const defaultState: TODOContextType = {
   create: () => {
     throw new Error("Create method is not yet implemented")
   },
-  delete: () => { },
+  deleteTODO: () => { },
+  getTodoByID: () => [],
+  getVitalTodos: () => [],
 };
 
 const TodoContext = createContext(defaultState);

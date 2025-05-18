@@ -1,7 +1,17 @@
-const VitalTasks = () => {
-    return (
-        <div>VitalTasks</div>
-    )
-}
+import TaskListView from "../../../components/TaskListView";
 
-export default VitalTasks
+import { useTodoContext } from "../../../context";
+
+const VitalTasks = () => {
+  const { getVitalTodos } = useTodoContext();
+
+  return (
+    <TaskListView
+      todos={getVitalTodos()}
+      title="Vital tasks"
+      fetchTODO={getVitalTodos}
+    />
+  );
+};
+
+export default VitalTasks;

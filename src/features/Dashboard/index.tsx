@@ -1,17 +1,24 @@
+import { useState } from "react";
+import { useNavigate } from "react-router";
 import TaskStatus from "../../components/TaskStatus";
 import style from "./style.module.css";
 import { useTodoContext } from "../../context";
 import SmallCard from "../../components/SmallCard";
 import { Icon } from "@iconify/react";
-import { useState } from "react";
 import AddTask from "./components/Add-Task";
+import type { ITODO } from "../../types";
 
 const Dashboard = () => {
   const { todos } = useTodoContext();
+  const navigate = useNavigate();
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
 
   const handleAddTaskModalClose = () => {
     setIsModalVisible(false);
+  };
+
+  const onTODOClick = (todo: [string, ITODO], index: number) => {
+    navigate(`/tasks/${index}`);
   };
   return (
     <div className={style.container}>
@@ -50,7 +57,13 @@ const Dashboard = () => {
           <div className={style.todays_task}>
             {todos && todos.length ? (
               todos.map((todo, index) =>
-                index % 2 ? <SmallCard key={index} todo={todo} /> : null
+                index % 2 ? (
+                  <SmallCard
+                    key={index}
+                    todo={todo}
+                    onClick={(targetTODO) => onTODOClick(targetTODO, index)}
+                  />
+                ) : null
               )
             ) : (
               <p>No todo</p>
@@ -59,7 +72,12 @@ const Dashboard = () => {
           <div className={style.separator}></div>
           <div className={style.priority_task}>
             {todos.length ? (
-              <SmallCard todo={todos[todos.length - 1]} />
+              <SmallCard
+                todo={todos[todos.length - 1]}
+                onClick={(targetTODO) =>
+                  onTODOClick(targetTODO, todos.length - 1)
+                }
+              />
             ) : (
               <p> No todo </p>
             )}

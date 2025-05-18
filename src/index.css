@@ -84,3 +84,11 @@ body {
   display: flex;
   flex-direction: column;
 }
+
+button {
+  &:hover {
+    & svg {
+      transform: scale(1.1);
+    }
+  }
+}
