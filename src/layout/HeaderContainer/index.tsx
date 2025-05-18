@@ -32,9 +32,10 @@ const HeaderContainer = () => {
     }
   };
 
-  const title = NAV_MENU_ITEMS.filter(
-    (item) => item.route === location.pathname
-  )[0].label;
+  const title =
+    NAV_MENU_ITEMS.filter((item) => item.route === location.pathname)[0]
+      ?.label ?? "To Do";
+
   return (
     <div className={style.container}>
       <h1 className={style.title}>{getFormattedTitle()}</h1>

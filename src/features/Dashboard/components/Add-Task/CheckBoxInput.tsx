@@ -9,7 +9,6 @@ const CheckBoxInput = ({
   onChange: (newState: boolean) => void;
 }) => {
   const onCheckToggle = (event: React.ChangeEvent) => {
-    console.log("Event", (event.target as HTMLInputElement).checked);
     onChange((event.target as HTMLInputElement).checked);
   };
   const getPriorityColor = () => {

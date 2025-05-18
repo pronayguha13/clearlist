@@ -6,6 +6,7 @@ import {
   onValue,
   push,
   ref,
+  remove,
   type DatabaseReference,
 } from "firebase/database";
 import config from "../config/configuration";
@@ -13,18 +14,16 @@ import config from "../config/configuration";
 const TodoContextWrapper = ({ children }: ContextWrapperProps) => {
   // Initialize the Firebase database with the provided configuration
   const database = getDatabase(config);
-  console.log("Database : ", database);
 
   // Reference to the specific collection in the database
   const collectionRef = ref(database, "todos");
-  const [todos, setTodos] = useState<ITODO[]>([]);
+  const [todos, setTodos] = useState<[string, ITODO][]>([]);
 
-  const [completedTodos, setCompletedTodos] = useState<Array<ITODO>>([]);
+  const [completedTodos, setCompletedTodos] = useState<[string, ITODO][]>([]);
 
   const createTODO = async (todo: ITODO): Promise<DatabaseReference> => {
     try {
       const response = await push(collectionRef, todo);
-      console.log("🚀 ~ createTODO ~ response:", response);
       return response;
     } catch (error) {
       console.error(error);
@@ -32,8 +31,22 @@ const TodoContextWrapper = ({ children }: ContextWrapperProps) => {
     }
   };
 
-  const deleteTODO = (todoID: string) => {
-    console.log("🚀 ~ deleteTODO ~ todoID:", todoID);
+  const deleteTODO = async (todoID: string) => {
+    const todoRef = ref(database, `todos/${todoID}`);
+
+    try {
+      await remove(todoRef);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const getTodoByID = (id: number): [string, ITODO] => {
+    return todos && todos.length ? todos[id] : [];
+  };
+
+  const getVitalTodos = () => {
+    return todos.filter((todo) => todo[1].priority === "Extreme");
   };
 
   /*----------------*/
@@ -47,9 +60,8 @@ const TodoContextWrapper = ({ children }: ContextWrapperProps) => {
         // Check if dataItem exists
         if (dataItem) {
           // Convert the object values into an array
-          const displayItem = Object.values(dataItem);
-          console.log("data recievied from the db: ", displayItem);
-          setTodos(displayItem as ITODO[]);
+          const todos = Object.entries<ITODO>(dataItem);
+          setTodos(todos);
         }
       });
     };
@@ -65,7 +77,9 @@ const TodoContextWrapper = ({ children }: ContextWrapperProps) => {
         todos: todos,
         completedTODOs: completedTodos,
         create: createTODO,
-        delete: deleteTODO,
+        deleteTODO: deleteTODO,
+        getTodoByID: getTodoByID,
+        getVitalTodos: getVitalTodos,
       }}
     >
       {children}

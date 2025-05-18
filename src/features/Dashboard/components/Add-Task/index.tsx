@@ -28,7 +28,6 @@ const AddTask = ({ onClose }: AddTaskProps) => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const handleTaskCreation = async () => {
     setIsLoading(true);
-    console.log("Clicked on done button", formData);
     try {
       const response = await create({
         title: formData.title,
