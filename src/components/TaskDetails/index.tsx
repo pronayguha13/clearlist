@@ -5,11 +5,11 @@ import type { ITODO } from "../../types";
 import { Fragment, useState } from "react";
 
 type TaskDetailsProps = {
-  todo: [string, ITODO];
+  todo: ITODO;
   showBackButton?: boolean;
   showEditPriorityButton?: boolean;
   onBack?: () => void;
-  onDelete: (todo: [string, ITODO]) => void;
+  onDelete: (todo: ITODO) => void;
 };
 
 const TaskDetails = ({
@@ -34,9 +34,9 @@ const TaskDetails = ({
             <div className={style.left}>
               <img src={DummyImage} alt="" />
               <div className={style.task_info}>
-                <h1>{todo[1].title}</h1>
-                <p>Priority: {todo[1].priority}</p>
-                <p>Status:{todo[1].status}</p>
+                <h1>{todo.task.title}</h1>
+                <p>Priority: {todo.task.priority}</p>
+                <p>Status:{todo.task.status}</p>
                 <pre>Created on : {new Date().toLocaleDateString("en-GB")}</pre>
               </div>
             </div>
@@ -47,7 +47,7 @@ const TaskDetails = ({
             ) : null}
           </div>
           <div className={style.body}>
-            <span className={style.description}>{todo[1].description}</span>
+            <span className={style.description}>{todo.task.description}</span>
           </div>
           <div className={style.controls}>
             <button>

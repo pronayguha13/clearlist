@@ -1,85 +1,101 @@
-import { useEffect, useState } from "react";
-import { TodoContext } from "../context";
-import type { ITODO } from "../types";
+import { useState, useEffect } from "react";
 import {
-  getDatabase,
-  onValue,
-  push,
-  ref,
-  remove,
-  type DatabaseReference,
-} from "firebase/database";
-import config from "../config/configuration";
+  collection,
+  getDocs,
+  addDoc,
+  doc,
+  getDoc,
+  deleteDoc,
+} from "firebase/firestore";
+import { TodoContext } from "../context/index.ts";
+import database from "../config/configuration.ts";
+// Types import
+import type { ITODO, TASK_DETAILS } from "../types/index.ts";
 
 const TodoContextWrapper = ({ children }: ContextWrapperProps) => {
-  // Initialize the Firebase database with the provided configuration
-  const database = getDatabase(config);
+  const collectionRef = collection(database, "todo");
+  const [todos, setTodos] = useState<ITODO[]>([]);
+  /**
+   * @description Function to create a document in the database
+   * @param { TASK_DETAILS } todo details of the document to be created
+   * @returs {Promise<unknown>} returns a promise of the response received else throws an console.error()
+   */
+  const create = async (todo: TASK_DETAILS) => {
+    const response = await addDoc(collection(database, "todo"), todo);
 
-  // Reference to the specific collection in the database
-  const collectionRef = ref(database, "todos");
-  const [todos, setTodos] = useState<[string, ITODO][]>([]);
+    console.log("response ", response);
+    return response;
+  };
 
-  const [completedTodos, setCompletedTodos] = useState<[string, ITODO][]>([]);
+  /**
+   * @description Function to fetch the todos where the priority is "Extreme"
+   * @returns {ITODO[]} vitalTODOs List of all the todos where the priority is Extreme
+   */
+  const getVitalTodos = (): ITODO[] => {
+    if (!todos.length) return [];
+    const vitalTODOs: ITODO[] = [] as ITODO[];
+    todos.forEach((todo) => {
+      if (todo.task.priority === "Extreme") {
+        vitalTODOs.push(todo);
+      }
+    });
 
-  const createTODO = async (todo: ITODO): Promise<DatabaseReference> => {
-    try {
-      const response = await push(collectionRef, todo);
-      return response;
-    } catch (error) {
-      console.error(error);
-      throw error;
+    return vitalTODOs;
+  };
+
+  const getTodoByID = async (id: string) => {
+    const docRef = doc(database, "todo", id);
+
+    const docSnap = await getDoc(docRef);
+
+    if (docSnap.exists()) {
+      return {
+        id: docSnap.id,
+        task: docSnap.data() as TASK_DETAILS,
+      };
+    } else {
+      return null;
     }
   };
 
-  const deleteTODO = async (todoID: string) => {
-    const todoRef = ref(database, `todos/${todoID}`);
-
-    try {
-      await remove(todoRef);
-    } catch (error) {
-      console.error(error);
+  const deleteTODO = async (id: string) => {
+    if (!id || !id.length) throw new Error("No id found");
+    else {
+      await deleteDoc(doc(database, "todo", id));
     }
   };
 
-  const getTodoByID = (id: number): [string, ITODO] => {
-    return todos && todos.length ? todos[id] : [];
-  };
-
-  const getVitalTodos = () => {
-    return todos.filter((todo) => todo[1].priority === "Extreme");
-  };
-
-  /*----------------*/
   useEffect(() => {
-    // Function to fetch data from the database
-    const fetchData = () => {
-      // Listen for changes in the collection
-      onValue(collectionRef, (snapshot) => {
-        const dataItem = snapshot.val();
-
-        // Check if dataItem exists
-        if (dataItem) {
-          // Convert the object values into an array
-          const todos = Object.entries<ITODO>(dataItem);
-          setTodos(todos);
-        }
-      });
+    const fetchTODO = async () => {
+      try {
+        const fetchedTodos: ITODO[] = [];
+        const response = await getDocs(collectionRef);
+        response.forEach((snapshot) => {
+          console.log(snapshot.data(), "Data");
+          fetchedTodos.push({
+            id: snapshot.id,
+            task: snapshot.data(),
+          } as ITODO);
+        });
+        console.log("Fetched todos:", fetchedTodos);
+        setTodos(fetchedTodos);
+      } catch (error) {
+        console.error(error);
+      }
     };
 
-    // Fetch data when the component mounts
-    fetchData();
+    fetchTODO();
   }, []);
 
-  /*----------------*/
   return (
     <TodoContext.Provider
       value={{
         todos: todos,
-        completedTODOs: completedTodos,
-        create: createTODO,
+        completedTODOs: [] as ITODO[],
         deleteTODO: deleteTODO,
-        getTodoByID: getTodoByID,
+        create: create,
         getVitalTodos: getVitalTodos,
+        getTodoByID: getTodoByID,
       }}
     >
       {children}

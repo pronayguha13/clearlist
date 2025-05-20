@@ -4,8 +4,8 @@ import style from "./style.module.css";
 import dummyImage from "../../assets/pexels-1173285862-32039255.webp";
 
 type SmallCardProps = {
-  todo: [string, ITODO];
-  onClick?: (todo: [string, ITODO]) => void;
+  todo: ITODO;
+  onClick?: (todo: ITODO) => void;
 };
 const SmallCard = ({ todo, onClick }: SmallCardProps) => {
   const inputBtnRef = useRef(null);
@@ -48,7 +48,7 @@ const SmallCard = ({ todo, onClick }: SmallCardProps) => {
     const composedPathEl = Array.from(event.nativeEvent.composedPath());
     if (
       !composedPathEl.find(
-        (el) => (el as HTMLElement).id === "radio-input-container"
+        (el) => (el as HTMLElement).id === "radio-input-container",
       ) &&
       onClick
     ) {
@@ -72,22 +72,22 @@ const SmallCard = ({ todo, onClick }: SmallCardProps) => {
           </div>
         </div>
         <div className={style.center_content}>
-          <h3 className={style.title}>{todo[1].title}</h3>
-          <span className={style.description}>{todo[1].description}</span>
+          <h3 className={style.title}>{todo.task.title}</h3>
+          <span className={style.description}>{todo.task.description}</span>
         </div>
         <img src={dummyImage} alt="" />
       </div>
       <div className={style.footer}>
         <span className={style.priority}>
           Priority:{" "}
-          <p style={getPriorityColor(todo[1].priority) as CSSProperties}>
-            {todo[1].priority ?? "Low"}
+          <p style={getPriorityColor(todo.task.priority) as CSSProperties}>
+            {todo.task.priority ?? "Low"}
           </p>
         </span>
         <span className={style.status}>
           Status:{" "}
-          <p style={getStatusColor(todo[1].status) as CSSProperties}>
-            {todo[1].status ?? "Not started"}
+          <p style={getStatusColor(todo.task.status) as CSSProperties}>
+            {todo.task.status ?? "Not started"}
           </p>
         </span>
         <span>Created on: {new Date().toLocaleDateString("en-GB")}</span>

@@ -6,23 +6,23 @@ import { useTodoContext } from "../../context";
 import style from "./style.module.css";
 
 type TaskListViewProps = {
-  todos: [string, ITODO][];
+  todos: ITODO[];
   title: string;
-  fetchTODO: () => [string, ITODO][];
+  fetchTODO: () => ITODO[];
 };
 const TaskListView = ({ todos, title, fetchTODO }: TaskListViewProps) => {
   const { deleteTODO } = useTodoContext();
 
-  const [selectedTODO, setSelectedTODO] = useState<[string, ITODO]>(
-    todos.length ? todos[0] : fetchTODO()[0]
+  const [selectedTODO, setSelectedTODO] = useState<ITODO>(
+    todos.length ? todos[0] : fetchTODO()[0],
   );
 
-  const onTodoClick = (targetTODO: [string, ITODO]) => {
+  const onTodoClick = (targetTODO: ITODO) => {
     setSelectedTODO(targetTODO);
   };
 
-  const onDeleteTODO = (todo: [string, ITODO]) => {
-    deleteTODO(todo[0]);
+  const onDeleteTODO = (todo: ITODO) => {
+    deleteTODO(todo.id);
   };
 
   useEffect(() => {
@@ -40,13 +40,13 @@ const TaskListView = ({ todos, title, fetchTODO }: TaskListViewProps) => {
             <SmallCard
               key={index}
               todo={todo}
-              onClick={(targetTODO: [string, ITODO]) => onTodoClick(targetTODO)}
+              onClick={(targetTODO: ITODO) => onTodoClick(targetTODO)}
             />
           ))}
         </div>
       </section>
       <section className={style.right}>
-        {selectedTODO?.length ? (
+        {selectedTODO ? (
           <TaskDetails todo={selectedTODO} onDelete={onDeleteTODO} />
         ) : (
           <h1>Click on a task to view the details</h1>

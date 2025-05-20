@@ -10,6 +10,7 @@ import type { ITODO } from "../../types";
 
 const Dashboard = () => {
   const { todos } = useTodoContext();
+  console.log("Todos", todos);
   const navigate = useNavigate();
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
 
@@ -17,8 +18,8 @@ const Dashboard = () => {
     setIsModalVisible(false);
   };
 
-  const onTODOClick = (todo: [string, ITODO], index: number) => {
-    navigate(`/tasks/${index}`);
+  const onTODOClick = (todo: ITODO) => {
+    navigate(`/tasks/${todo.id}`);
   };
   return (
     <div className={style.container}>
@@ -61,9 +62,9 @@ const Dashboard = () => {
                   <SmallCard
                     key={index}
                     todo={todo}
-                    onClick={(targetTODO) => onTODOClick(targetTODO, index)}
+                    onClick={(targetTODO) => onTODOClick(targetTODO)}
                   />
-                ) : null
+                ) : null,
               )
             ) : (
               <p>No todo</p>
@@ -74,9 +75,7 @@ const Dashboard = () => {
             {todos.length ? (
               <SmallCard
                 todo={todos[todos.length - 1]}
-                onClick={(targetTODO) =>
-                  onTODOClick(targetTODO, todos.length - 1)
-                }
+                onClick={(targetTODO) => onTODOClick(targetTODO)}
               />
             ) : (
               <p> No todo </p>

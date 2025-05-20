@@ -1,10 +1,14 @@
 type ITODO = {
-  title: string;
-  description: string;
-  createdAt: string;
-  isComplete: boolean;
-  status: "Completed" | "In Progress" | "Not started";
-  priority: "Extreme" | "Moderate" | "Low";
-};
+	id: string;
+	task: TASK_DETAILS;
 
-export type { ITODO };
+type TASK_DETAILS = {
+		title: string;
+		description: string;
+		createdAt: string;
+		isComplete: boolean;
+		status: "Completed" | "In Progress" | "Not started";
+		priority: "Extreme" | "Moderate" | "Low";
+
+	}
+export type { ITODO, TASK_DETAILS };

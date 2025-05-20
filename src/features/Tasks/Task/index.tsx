@@ -9,28 +9,31 @@ const Task = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const { getTodoByID, deleteTODO } = useTodoContext();
-  const [todo, setTodo] = useState<[string, ITODO]>([]);
+  const [todo, setTodo] = useState<Nullable<ITODO>>();
 
   const onBack = () => {
     navigate("/dashboard");
   };
 
-  const onDelete = (todo: [string, ITODO]) => {
-    deleteTODO(todo[0]);
+  const onDelete = (todo: ITODO) => {
+    deleteTODO(todo.id);
 
     onBack();
   };
 
   useEffect(() => {
+    console.log("ID", id);
+
     if (id && !Number.isNaN(Number(id)) && Number(id) >= 0) {
-      const fetchedTODO = getTodoByID(Number(id));
+      const fetchedTODO = getTodoByID(id);
+      console.log("Fetched TODO", fetchedTODO);
       setTodo(fetchedTODO);
     }
   }, [id]);
 
   return (
     <div className={style.container}>
-      {todo && todo.length ? (
+      {todo ? (
         <TaskDetails
           todo={todo}
           onDelete={onDelete}

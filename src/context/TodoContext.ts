@@ -1,25 +1,26 @@
 import { createContext, useContext } from "react";
-import type { ITODO } from "../types";
-import type { DatabaseReference } from "firebase/database";
+import type { ITODO, TASK_DETAILS } from "../types";
 
 export type TODOContextType = {
-  todos: Array<[string, ITODO]>;
-  completedTODOs: Array<[string, ITODO]>;
-  create: (todo: ITODO) => Promise<DatabaseReference>;
+  todos: Array<ITODO>;
+  completedTODOs: Array<ITODO>;
+  create: (todo: TASK_DETAILS) => Promise<unknown>;
   deleteTODO: (id: string) => void;
-  getTodoByID: (id: number) => [string, ITODO]
-  getVitalTodos: () => Array<[string, ITODO]>
+  getTodoByID: (id: string) => Promise<Nullable<ITODO>>;
+  getVitalTodos: () => Array<ITODO>;
 };
 
 const defaultState: TODOContextType = {
   todos: [],
   completedTODOs: [],
   create: () => {
-    throw new Error("Create method is not yet implemented")
+    throw new Error("Create method is not yet implemented");
   },
-  deleteTODO: () => { },
-  getTodoByID: () => [],
-  getVitalTodos: () => [],
+  deleteTODO: () => {},
+  getTodoByID: () => {
+    throw new Error("Method is not yet implemented");
+  },
+  getVitalTodos: () => [] as ITODO[],
 };
 
 const TodoContext = createContext(defaultState);
