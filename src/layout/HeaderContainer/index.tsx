@@ -2,6 +2,7 @@ import { useLocation } from "react-router";
 import style from "./style.module.css";
 import { NAV_MENU_ITEMS } from "../../types";
 import { Icon } from "@iconify/react";
+import SearchInput from "../../components/SearchInput";
 
 const HeaderContainer = () => {
   const location = useLocation();
@@ -40,10 +41,7 @@ const HeaderContainer = () => {
     <div className={style.container}>
       <h1 className={style.title}>{getFormattedTitle()}</h1>
       <div className={style.search_container}>
-        <input type="search" className={style.search_input} />
-        <button className={style.search_button}>
-          <Icon icon="material-symbols:search" width="32px" height="32px" />
-        </button>
+        <SearchInput />
       </div>
       <div className={style.extra_icon_container}>
         <div className={style.left}>

@@ -1,0 +1,24 @@
+.popover_container {
+    --popover-width: var(--width, fit-content);
+    --popover-height: var(--height, fit-content);
+    --popover-top: var(--top, 0);
+    --popover-bottom: var(--bottom, 0);
+    --popover-left: var(--left, 0);
+    --popover-right: var(--right, 0);
+    position: absolute;
+    top: var(--popover-top);
+    bottom: var(--popover-bottom);
+    left: var(--popover-left);
+    right: var(--popover-right);
+    width: var(--popover-width);
+    height: var(--popover-height);
+    max-height: 50dvh;
+    z-index: 2;
+    background-color: var(--color-background);
+    padding: 1rem 2rem;
+    box-shadow: 0 0.25rem 12px 0px rgba(0, 0, 0, 0.4);
+    border-radius: 0.5rem;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+}

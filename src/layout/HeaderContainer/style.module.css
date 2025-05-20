@@ -23,30 +23,7 @@
         justify-content: center;
         height: 3rem;
 
-        & .search_input {
-            flex: 1;
-            height: 100%;
-            padding: 0.5rem;
-            border: none;
-            outline: none;
-            border-top-left-radius: 0.5rem;
-            border-bottom-left-radius: 0.5rem;
-            font-size: 1.5rem;
-            color: var(--color-text-muted);
-        }
 
-        & .search_button {
-            height: 100%;
-            padding: 0 1rem;
-            border: none;
-            outline: none;
-            border-radius: 0.5rem;
-            border-top-left-radius: 0;
-            border-bottom-left-radius: 0;
-            background-color: var(--color-brand-primary);
-            color: var(--color-background);
-            cursor: pointer;
-        }
     }
 
     & .extra_icon_container {
