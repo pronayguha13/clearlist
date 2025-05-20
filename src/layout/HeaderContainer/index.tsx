@@ -6,7 +6,11 @@ import SearchInput from "../../components/SearchInput";
 
 const HeaderContainer = () => {
   const location = useLocation();
+	
 
+	/**
+	 * @description Function to format the header title with the page route
+	 */
   const getFormattedTitle = () => {
     const strippedTitle = title.split(" ");
 

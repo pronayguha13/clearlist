@@ -42,6 +42,14 @@ const SearchInput = () => {
     setQuery(value);
   };
 
+  /**
+   * @description Function to handle the click on the individual search item
+   *
+   */
+  const onClickSearchItem = (todo: [string, ITODO]) => {
+    navigate(`/tasks/${todo[0]}`);
+  };
+
   useEffect(() => {
     if (searchInputRef.current) {
       setAnchorEl(searchInputRef.current);
@@ -70,9 +78,15 @@ const SearchInput = () => {
       </button>
       {anchorEl && (
         <Popover parent={anchorEl}>
-          {filteredTODO.map((todo, index) => (
-            <p key={index}> {todo[1].title} </p>
-          ))}
+          {query.length ? (
+            filteredTODO.length ? (
+              filteredTODO.map((todo, index) => (
+                <p key={index}> {todo[1].title} </p>
+              ))
+            ) : (
+              <p> No Result </p>
+            )
+          ) : null}
         </Popover>
       )}
     </div>
