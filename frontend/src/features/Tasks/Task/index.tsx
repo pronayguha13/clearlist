@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useParams, useNavigate } from "react-router";
 import { useTodoContext } from "../../../context";
 import type { ITODO } from "../../../types";
@@ -8,8 +8,8 @@ import style from "./style.module.css";
 const Task = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const { getTodoByID, deleteTODO } = useTodoContext();
-  const [todo, setTodo] = useState<[string, ITODO]>([]);
+  const { getTodoById, deleteTODO } = useTodoContext();
+  const { data, refetch, isError, isLoading } = getTodoById(Number(id));
 
   const onBack = () => {
     navigate("/dashboard");
@@ -23,24 +23,33 @@ const Task = () => {
 
   useEffect(() => {
     if (id && !Number.isNaN(Number(id)) && Number(id) >= 0) {
-      const fetchedTODO = getTodoByID(Number(id));
-      setTodo(fetchedTODO);
+      refetch()
     }
   }, [id]);
 
+
+  const getContent = () => {
+    if (isLoading) return <p>Loading....</p>;
+
+    if (isError) return <p> Failed to fetch data</p>
+
+
+    return data ? (
+      <TaskDetails
+        todo={data}
+        onDelete={onDelete}
+        showBackButton={true}
+        onBack={onBack}
+      />
+    ) : (
+      <p>No todo</p>
+    )
+  }
+
   return (
     <div className={style.container}>
-      {todo && todo.length ? (
-        <TaskDetails
-          todo={todo}
-          onDelete={onDelete}
-          showBackButton={true}
-          onBack={onBack}
-        />
-      ) : (
-        <p>No todo</p>
-      )}
-    </div>
+      {getContent()}
+    </div >
   );
 };
 

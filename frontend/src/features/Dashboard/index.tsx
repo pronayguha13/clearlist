@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import TaskStatus from "../../components/TaskStatus";
 import style from "./style.module.css";
@@ -7,15 +7,23 @@ import SmallCard from "../../components/SmallCard";
 import { Icon } from "@iconify/react";
 import AddTask from "./components/Add-Task";
 import type { ITODO } from "../../types";
+import type { UseMutationResult } from "@tanstack/react-query";
 
 const Dashboard = () => {
-  const { todos } = useTodoContext();
+  const { todos, create } = useTodoContext();
   const navigate = useNavigate();
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
+  const { mutate, isSuccess, isPending, isError } = (create as UseMutationResult);
 
   const handleAddTaskModalClose = () => {
     setIsModalVisible(false);
   };
+
+  useEffect(() => {
+    if (isSuccess) {
+      handleAddTaskModalClose()
+    }
+  }, [isSuccess])
 
   const onTODOClick = (todo: ITODO, index: number) => {
     navigate(`/tasks/${index}`);
@@ -87,7 +95,7 @@ const Dashboard = () => {
           <TaskStatus />
         </div>
       </div>
-      {isModalVisible ? <AddTask onClose={handleAddTaskModalClose} /> : null}
+      {isModalVisible ? <AddTask onClose={handleAddTaskModalClose} onCreate={mutate} isPending={isPending} isSuccess={isSuccess} /> : null}
     </div>
   );
 };

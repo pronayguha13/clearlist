@@ -1,28 +1,30 @@
 import { createContext, useContext } from "react";
 import type { ITODO, PriorityValue } from "../types";
 import type { UseQueryResult } from "@tanstack/react-query";
-// import type { UseQueryResult } from "@tanstack/react-query";
+import type { TaskStatus } from '../types/Todo';
 
 export type TODOContextType = {
   todos: Array<ITODO>;
-  // create: (todo: Omit<ITODO, 'id' | 'createdAt' | 'updatedAt'>) => Promise<ITODO>;
-  // deleteTODO: (id: string) => void;
-  // getTodoById: (id: number) => UseQueryResult<ITODO | null, Error>;
+  create: unknown;
+  deleteTODO: (id: number) => UseQueryResult<unknown, Error>;
+  getTodoById: (id: number) => UseQueryResult<ITODO, Error>;
   getVitalTodos: (priority: PriorityValue) => void;
+  getTaskStatus: () => UseQueryResult<TaskStatus, Error>
+  search: (queryString: string) => UseQueryResult<ITODO[], Error>
 };
 
 const defaultState: TODOContextType = {
   todos: [],
-  // create: () => {
-  //   throw new Error("Create method is not yet implemented")
-  // },
-  // deleteTODO: () => { },
-  // getTodoById: () => {
-  //   throw new Error("getTodoById method must be implemented by provider");
-  // },
+  create: () => { },
+  deleteTODO: () => ({} as UseQueryResult<unknown, Error>),
+  getTodoById: () => {
+    throw new Error("getTodoById method must be implemented by provider");
+  },
   getVitalTodos: () => {
     throw new Error("getVitalTodos method must be implemented by provider");
   },
+  getTaskStatus: () => ({} as UseQueryResult<TaskStatus, Error>),
+  search: () => ({} as UseQueryResult<ITODO[], Error>),
 };
 
 const TodoContext = createContext(defaultState);

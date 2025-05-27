@@ -5,41 +5,58 @@ import customInstance from "../hooks/useAxiosInterceptor"
 import type { ITODO, PriorityValue } from "../types";
 
 export const fetchAllTODO = async () => {
-    const response = await customInstance.get("/todos/");
+  const response = await customInstance.get("/todos/");
 
-    return response.data.todos;
+  return response.data.todos;
 }
 
 
 export const getVitalTODOs = async (priority: PriorityValue) => {
-    const response = await customInstance.get(`/todos/${priority}`)
+  const response = await customInstance.get(`/todos/priority=${priority}`)
 
-    return response.data.todos;
+  return response.data.todos;
 }
 
 export const fetchTODOByID = async (id: number) => {
-    const response = await customInstance.get(`/todos/${id}/`);
+  const response = await customInstance.get(`/todos/${id}/`);
 
-    return response.data
+  return response.data.todo
 }
 
 
-export const createTODO = async (newTODO: Omit<ITODO, 'id' | 'created_at' | 'updated_at'>) => {
-    const response = await customInstance.post("/todo/", newTODO)
+export const createTODO = async (newTODO: Omit<ITODO, 'id' | 'createdAt' | 'updatedAt' | "isCompleted">) => {
+  const response = await customInstance.post("/todo/", newTODO)
 
-    return response.data;
+  return response.data;
 }
 
 export const updateTODO = async (id: number, updatedTODO: Partial<ITODO>) => {
-    const response = await customInstance.put(`/todo/${id}/`, updatedTODO);
+  const response = await customInstance.put(`/todo/${id}/`, updatedTODO);
 
-    return response.data;
+  return response.data;
 }
 
 
 export const deleteTODO = async (id: number) => {
-    const response = await customInstance.delete(`/todo/${id}`)
+  const response = await customInstance.delete(`/todo/${id}/`)
 
 
-    return response.data;
+  return response.data;
+}
+
+export const getTaskStatus = async () => {
+  const response = await customInstance.get("/todos/status/")
+
+  return response.data
+}
+
+export const searchTask = async (queryString: string) => {
+  const queryParams = new URLSearchParams({
+    q: queryString
+  }).toString()
+
+
+  const response = await customInstance.get(`/todos/search-tasks?${queryParams}`);
+
+  return response.data;
 }
