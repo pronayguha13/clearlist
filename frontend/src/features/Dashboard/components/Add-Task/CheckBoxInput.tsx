@@ -1,3 +1,4 @@
+import { toTitleCase } from "../../../../utils";
 import style from "./style.module.css";
 const CheckBoxInput = ({
   priority,
@@ -29,7 +30,7 @@ const CheckBoxInput = ({
       style={{ "--priority-color": getPriorityColor() } as React.CSSProperties}
     >
       <div className={style.circle}>&nbsp;</div>
-      <label htmlFor="priority">{priority}</label>
+      <label htmlFor="priority">{toTitleCase(priority)}</label>
       <input type="checkbox" checked={selected} onChange={onCheckToggle} />
     </div>
   );

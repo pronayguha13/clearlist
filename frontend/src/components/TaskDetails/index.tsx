@@ -3,23 +3,26 @@ import style from "./style.module.css";
 import DummyImage from "../../assets/pexels-1173285862-32039255.webp";
 import type { ITODO } from "../../types";
 import { Fragment, useState } from "react";
+import { getPriority, getStatus } from "../../types/Todo";
+import { formatter } from "../../utils";
 
 type TaskDetailsProps = {
-  todo: [string, ITODO];
+  todo: ITODO;
   showBackButton?: boolean;
   showEditPriorityButton?: boolean;
   onBack?: () => void;
-  onDelete: (todo: [string, ITODO]) => void;
+  onDelete: (todo: ITODO) => void;
 };
 
 const TaskDetails = ({
   todo,
   showBackButton = false,
   showEditPriorityButton = false,
-  onBack = () => {},
+  onBack = () => { },
   onDelete,
 }: TaskDetailsProps) => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const format = formatter();
   const handleDelete = () => {
     setIsLoading(true);
     onDelete(todo);
@@ -34,10 +37,10 @@ const TaskDetails = ({
             <div className={style.left}>
               <img src={DummyImage} alt="" />
               <div className={style.task_info}>
-                <h1>{todo[1].title}</h1>
-                <p>Priority: {todo[1].priority}</p>
-                <p>Status:{todo[1].status}</p>
-                <pre>Created on : {new Date().toLocaleDateString("en-GB")}</pre>
+                <h1>{todo.title}</h1>
+                <p>Priority: {format(getPriority(todo.priority))}</p>
+                <p>Status:{format(getStatus(todo.status))}</p>
+                <pre>Created on : {new Date(todo.createdAt).toLocaleDateString("en-GB")}</pre>
               </div>
             </div>
             {showBackButton ? (
@@ -47,7 +50,7 @@ const TaskDetails = ({
             ) : null}
           </div>
           <div className={style.body}>
-            <span className={style.description}>{todo[1].description}</span>
+            <span className={style.description}>{todo.description}</span>
           </div>
           <div className={style.controls}>
             <button>

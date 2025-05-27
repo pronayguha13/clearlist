@@ -2,9 +2,12 @@ import { useLocation } from "react-router";
 import style from "./style.module.css";
 import { NAV_MENU_ITEMS } from "../../types";
 import { Icon } from "@iconify/react";
+import SearchInput from "../../components/SearchInput";
 
 const HeaderContainer = () => {
   const location = useLocation();
+
+
 
   const getFormattedTitle = () => {
     const strippedTitle = title.split(" ");
@@ -36,15 +39,11 @@ const HeaderContainer = () => {
     NAV_MENU_ITEMS.filter((item) => item.route === location.pathname)[0]
       ?.label ?? "To Do";
 
+
   return (
     <div className={style.container}>
       <h1 className={style.title}>{getFormattedTitle()}</h1>
-      <div className={style.search_container}>
-        <input type="search" className={style.search_input} />
-        <button className={style.search_button}>
-          <Icon icon="material-symbols:search" width="32px" height="32px" />
-        </button>
-      </div>
+      <SearchInput />
       <div className={style.extra_icon_container}>
         <div className={style.left}>
           <button>

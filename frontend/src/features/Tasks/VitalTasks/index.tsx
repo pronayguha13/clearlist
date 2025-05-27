@@ -7,7 +7,7 @@ import { PRIORITY_CHOICES } from "../../../types";
 const VitalTasks = () => {
   const { getVitalTodos } = useTodoContext();
 
-  const { data, refetch } = getVitalTodos(PRIORITY_CHOICES.LOW)
+  const { data, refetch } = getVitalTodos(PRIORITY_CHOICES.EXTREME)
   console.log('🚀 ~ VitalTasks ~ data:', data)
 
   useEffect(() => {

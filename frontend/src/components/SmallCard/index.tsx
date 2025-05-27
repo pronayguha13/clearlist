@@ -3,6 +3,7 @@ import { type ITODO, getPriorityColor, getStatusColor } from "../../types";
 import style from "./style.module.css";
 import dummyImage from "../../assets/pexels-1173285862-32039255.webp";
 import { getPriority, getStatus } from "../../types/Todo";
+import { toTitleCase } from "../../utils";
 
 type SmallCardProps = {
   todo: ITODO;
@@ -48,16 +49,16 @@ const SmallCard = ({ todo, onClick }: SmallCardProps) => {
         <span className={style.priority}>
           Priority:{" "}
           <p style={getPriorityColor(todo.priority) as CSSProperties}>
-            {getPriority(todo.priority) ?? "Low"}
+            {toTitleCase(getPriority(todo.priority)) ?? "Low"}
           </p>
         </span>
         <span className={style.status}>
           Status:{" "}
           <p style={getStatusColor(todo.status) as CSSProperties}>
-            {getStatus(todo.status) ?? "Not started"}
+            {toTitleCase(getStatus(todo.status)) ?? "Not started"}
           </p>
         </span>
-        <span>Created on: {new Date().toLocaleDateString("en-GB")}</span>
+        <span>Created on: {new Date(todo.createdAt).toLocaleDateString("en-GB")}</span>
       </div>
     </div>
   );

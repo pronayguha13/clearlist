@@ -1,52 +1,46 @@
-import { Fragment, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import Modal from "../../../../components/Modal";
 
 import style from "./style.module.css";
 import CheckBoxInput from "./CheckBoxInput";
-import { useTodoContext } from "../../../../context";
+import { PRIORITY_CHOICES } from "../../../../types";
+import type { UseMutateFunction } from "@tanstack/react-query";
+import { getPriorityValue, type PriorityValue } from "../../../../types/Todo";
 
 type AddTaskProps = {
+  onCreate: UseMutateFunction<unknown, Error, unknown, unknown>;
   onClose: () => void;
+  isPending: boolean;
+  isSuccess: boolean
 };
-type Priority = "Extreme" | "Moderate" | "Low";
+
 
 type FormState = {
   title: string;
-  creationDate: string;
-  priority: null | Priority;
+  dueDate: string;
+  priority: null | PriorityValue;
   description: string;
 };
 
-const AddTask = ({ onClose }: AddTaskProps) => {
-  const { create } = useTodoContext();
+const AddTask = ({ onCreate, onClose, isPending, isSuccess = false }: AddTaskProps) => {
   const [formData, setFormData] = useState<FormState>({
     title: "",
-    creationDate: new Date().toDateString(),
+    dueDate: new Date().toISOString().split("T")[0],
     priority: null,
     description: "",
   });
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-  const handleTaskCreation = async () => {
-    setIsLoading(true);
-    try {
-      const response = await create({
-        title: formData.title,
-        description: formData.description,
-        priority: formData.priority ?? "Low",
-        createdAt: formData.creationDate,
-        isComplete: false,
-        status: "Not started",
-      });
-      if (response) {
-        window.alert("Successfully added a new todo to the list");
-        onClose();
-      }
-    } catch (error) {
-      console.error("Error while creating task", error);
-    } finally {
-      setIsLoading(false);
-    }
+
+  const handleTaskCreation = () => {
+    const newTODOPayload = {
+      title: formData.title,
+      description: formData.description,
+      priority: formData.priority ?? PRIORITY_CHOICES.LOW,
+      dueDate: formData.dueDate,
+    };
+
+    onCreate(newTODOPayload);
   };
+
 
   const updateFormField = <K extends keyof FormState>(
     fieldName: K,
@@ -57,9 +51,11 @@ const AddTask = ({ onClose }: AddTaskProps) => {
       [fieldName]: value,
     }));
   };
-  const updatePriority = (priority: string, state: boolean) => {
-    updateFormField("priority", state ? (priority as Priority) : null);
+  const updatePriority = (priority: number, state: boolean) => {
+    updateFormField("priority", state ? getPriorityValue(priority) : null);
   };
+
+
 
   return (
     <Fragment>
@@ -70,9 +66,9 @@ const AddTask = ({ onClose }: AddTaskProps) => {
           <div className={style.footer}>
             <button
               onClick={handleTaskCreation}
-              disabled={isLoading || !formData.title.length}
+              disabled={isPending || !formData.title.length}
             >
-              {isLoading ? "Pending" : "Done"}
+              {isPending ? "Pending" : isSuccess ? "Done" : "Create"}
             </button>
           </div>
         }
@@ -92,31 +88,31 @@ const AddTask = ({ onClose }: AddTaskProps) => {
             />
           </div>
           <div className={style.form_field}>
-            <label htmlFor="creationDate">Date</label>
+            <label htmlFor="dueDate">Date</label>
             <input
               type="date"
-              name="creationDate"
-              id="creationDate"
+              name="dueDate"
+              id="dueDate"
               placeholder="Enter your due date"
               value={
-                new Date(formData.creationDate).toISOString().split("T")[0]
+                formData.dueDate
               }
               onChange={(event) =>
-                updateFormField("creationDate", event.target.value)
+                updateFormField("dueDate", new Date(event.target.value).toISOString().split("T")[0])
               }
             />
           </div>
           <div className={style.form_field}>
             <label htmlFor="priority">Priority</label>
             <div className={style.checkboxes}>
-              {["Extreme", "Moderate", "Low"].map((priority, index) => (
+              {Object.entries(PRIORITY_CHOICES).map((priority, index) => (
                 <CheckBoxInput
                   key={index}
-                  priority={priority}
+                  priority={priority[0]}
                   selected={
-                    formData.priority ? priority === formData.priority : false
+                    formData.priority ? getPriorityValue(priority[1]) === formData.priority : false
                   }
-                  onChange={(checked) => updatePriority(priority, checked)}
+                  onChange={(checked) => updatePriority(priority[1], checked)}
                 />
               ))}
             </div>

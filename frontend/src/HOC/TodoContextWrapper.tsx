@@ -1,8 +1,11 @@
 import { TodoContext } from "../context";
 import type { ITODO, PriorityValue } from "../types";
-import { useQuery } from "@tanstack/react-query";
-import { fetchAllTODO, getVitalTODOs } from "../services/api";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { createTODO, deleteTODO, fetchAllTODO, fetchTODOByID, getTaskStatus, getVitalTODOs, searchTask } from "../services/api";
+import type { AxiosError } from "axios";
+import type { TaskStatus } from "../types/Todo";
 const TodoContextWrapper = ({ children }: ContextWrapperProps) => {
+  const queryClient = useQueryClient();
   // query to fetch all the todo
   const { data: todos } = useQuery<Array<ITODO>>({
     queryKey: ["todos"],
@@ -10,30 +13,28 @@ const TodoContextWrapper = ({ children }: ContextWrapperProps) => {
     initialData: []
   })
 
-  // const createTODO = async (todo: ITODO) => {
-  //   // try {
-  //   //   const response = await push(collectionRef, todo);
-  //   //   return response;
-  //   // } catch (error) {
-  //   //   console.error(error);
-  //   //   throw error;
-  //   // }
-  // };
+  const createTODOMutation = useMutation<ITODO, AxiosError, Omit<ITODO, 'id' | 'createdAt' | 'updatedAt' | "isCompleted">, unknown
+  >({
+    mutationKey: ["create-todo"],
+    mutationFn: createTODO,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["todos"] })
+      queryClient.invalidateQueries({ queryKey: ["task-status"] })
+    },
+    onError: (error: Error) => {
+      console.log('🚀 ~ TodoContextWrapper ~ error:', error)
+      window.alert("Failed to create task")
+    }
+  })
 
-  // const deleteTODO = async (todoID: string) => {
-  //   // const todoRef = ref(database, `todos/${todoID}`);
 
-  //   // try {
-  //   //   await remove(todoRef);
-  //   // } catch (error) {
-  //   //   console.error(error);
-  //   // }
-  // };
-
-  // const getTodoByID = (id: number): Promise<ITODO> => {
-  //   return axios.get(`${import.meta.env.VITE_API_URL
-  //     }/todos/${id}`)
-  // };
+  const getTodoByIDQuery = (id: number) => {
+    return useQuery<ITODO>({
+      queryKey: ["todo", id],
+      queryFn: () => fetchTODOByID(id),
+      enabled: false
+    })
+  }
 
   const getVitalTodoQuery = (priority: PriorityValue): unknown => {
     //query to fetch all the priority tasks
@@ -47,6 +48,29 @@ const TodoContextWrapper = ({ children }: ContextWrapperProps) => {
     return { data, refetch }
   };
 
+
+  const getTaskStatusQuery = () => {
+    return useQuery<TaskStatus>({
+      queryKey: ["task-status"],
+      queryFn: getTaskStatus,
+      enabled: false
+    })
+  }
+  const searchtaskQuery = (queryString: string) => {
+    return useQuery<ITODO[]>({
+      queryKey: ["search-task", queryString],
+      queryFn: () => searchTask(queryString),
+      enabled: false,
+    })
+  }
+
+  const deleteTODOQuery = (todoID: number) => {
+    return useQuery<unknown>({
+      queryKey: ["delete-task", todoID],
+      queryFn: () => deleteTODO(todoID),
+      enabled: false
+    })
+  }
   /*----------------*/
 
 
@@ -73,10 +97,12 @@ const TodoContextWrapper = ({ children }: ContextWrapperProps) => {
     <TodoContext.Provider
       value={{
         todos: todos,
-        // create: createTODO,
-        // deleteTODO: deleteTODO,
-        // getTodoByID: fetchTODOByID,
+        create: createTODOMutation,
+        deleteTODO: deleteTODOQuery,
+        getTodoById: getTodoByIDQuery,
         getVitalTodos: getVitalTodoQuery,
+        getTaskStatus: getTaskStatusQuery,
+        search: searchtaskQuery,
       }}
     >
       {children}

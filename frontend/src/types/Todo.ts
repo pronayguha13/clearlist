@@ -1,7 +1,7 @@
 export const STATUS_CHOICES = Object.freeze({
-  "NOT_STARTED": 1,
-  "IN_PROGRESS": 2,
-  "COMPLETED": 3
+  "NOTSTARTED": 3,
+  "INPROGRESS": 2,
+  "COMPLETED": 31
 })
 
 export const PRIORITY_CHOICES = Object.freeze({
@@ -10,16 +10,19 @@ export const PRIORITY_CHOICES = Object.freeze({
   "LOW": 3
 })
 
+
 // Type helpers to extract the values from the enums
 export type StatusValue = typeof STATUS_CHOICES[keyof typeof STATUS_CHOICES];
 export type PriorityValue = typeof PRIORITY_CHOICES[keyof typeof PRIORITY_CHOICES]
 
 export type ITODO = {
+  id: number,
   title: string;
   description: string;
-  created_at: Date;
-  updated_at: Date;
-  is_complete: boolean;
+  createdAt: Date;
+  updatedAt: Date;
+  dueDate: Date;
+  isComplete: boolean;
   status: StatusValue;
   priority: PriorityValue;
 };
@@ -31,7 +34,7 @@ export const getStatusColor = (status: number) => {
       return {
         color: "var(--color-status-completed)",
       };
-    case STATUS_CHOICES.IN_PROGRESS:
+    case STATUS_CHOICES.INPROGRESS:
       return {
         color: "var(--color-status-in-progress)",
       };
@@ -65,4 +68,17 @@ export const getStatus = (status: number) => {
 
 export const getPriority = (priority: number) => {
   return Object.entries(PRIORITY_CHOICES).filter(priority_choice => priority_choice[1] === priority)[0][0]
+}
+
+export const getStatusValue = (status: number) => {
+  return Object.values(STATUS_CHOICES).filter(statusChoice => statusChoice === status)[0]
+}
+
+export const getPriorityValue = (priority: number) => {
+  return Object.values(STATUS_CHOICES).filter(statusChoice => statusChoice === priority)[0]
+}
+export interface TaskStatus {
+  completed: number;
+  inProgress: number;
+  notStarted: number;
 }

@@ -1,18 +1,30 @@
+import { useEffect } from "react";
+import { useTodoContext } from "../../context";
 import TaskStat from "../TaskStat";
 import style from "./style.module.css";
 import { Icon } from "@iconify/react";
 
 const TaskStatus = () => {
-  const getStatus = (index: number) => {
-    switch (index) {
-      case 0:
-        return "Completed";
-      case 1:
-        return "In Progress";
-      default:
-        return "Not started";
+  const { getTaskStatus } = useTodoContext();
+  const { data, isFetching, isLoading, isError, refetch } = getTaskStatus()
+  useEffect(() => {
+
+    refetch()
+  }, [])
+
+
+  const getUI = () => {
+    if (isLoading || isFetching) return <p>Loading....</p>
+    if (isError) return <p>Failed to fetch status</p>
+
+    if (data) {
+      return (<div className={style.task_statcontainer}>
+        {Object.entries(data).map(([status, percentage], index: number) => (
+          <TaskStat key={index} percentage={percentage} status={status} />
+        ))}
+      </div>)
     }
-  };
+  }
 
   return (
     <div className={style.status_container}>
@@ -25,13 +37,7 @@ const TaskStatus = () => {
         />
         <p className={style.title}>Task Status</p>
       </div>
-      <div className={style.task_statcontainer}>
-        {new Array(3)
-          .fill(Math.round(Math.random() * 100))
-          .map((el: number, index: number) => (
-            <TaskStat key={index} percentage={el} status={getStatus(index)} />
-          ))}
-      </div>
+      {getUI()}
     </div>
   );
 };
