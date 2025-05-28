@@ -38,7 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     "api",
     "rest_framework",
-    "rest_framework_swagger",
+    "rest_framework_simplejwt"
 ]
 
 # ...
@@ -57,6 +57,12 @@ REST_FRAMEWORK = {
         'djangorestframework_camel_case.parser.CamelCaseJSONParser',
         # Any other parsers
     ),
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ),
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticated',
+    )
 }
 # ...
 
