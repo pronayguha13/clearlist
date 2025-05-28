@@ -1,8 +1,12 @@
 from django.urls import path, include
-from .views import get_task_list, create_task, get_priority_list, get_task_by_id, delete_task, get_status, search_tasks
+from .views import (get_task_list, create_task,
+                    get_priority_list, get_task_by_id,
+                    delete_task, get_status,
+                    search_tasks, login, register)
 
 urlpatterns = [
-
+    path('login/', login, name='login'),
+    path('register/', register, name='register'),
     path("todos/", include(
         [
             path("", get_task_list, name="get-task-list"),
