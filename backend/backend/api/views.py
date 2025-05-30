@@ -9,6 +9,7 @@ from .models import Task
 from .serializers import TaskSerializer
 from django.contrib.auth import authenticate
 from django.contrib.auth.models import User
+from django.db import connection
 
 
 # Create your views here.
@@ -44,7 +45,10 @@ def register(request):
 
 @api_view(["GET"])
 def get_task_list(request):
-    tasks = Task.objects.all().order_by("-created_at")
+    tasks = (Task.objects.select_related("author")
+             .filter(author=request.user)
+             .order_by("-created_at"))
+
     serializer = TaskSerializer(tasks, many=True)
     return Response({"todos": serializer.data, "status": status.HTTP_200_OK})
 
@@ -88,9 +92,10 @@ def search_tasks(request):
 
 @api_view(["POST"])
 def create_task(request):
+    print(request.user)
     serializer = TaskSerializer(data=request.data)
     if serializer.is_valid():
-        serializer.save()
+        serializer.save(author=request.user)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
