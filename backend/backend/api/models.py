@@ -1,5 +1,6 @@
 from django.db import models
 from django.utils.timezone import now
+from django.contrib.auth.models import User
 
 
 # Create your models here.
@@ -26,10 +27,14 @@ class Task(models.Model):
     status = models.IntegerField(
         choices=StatusChoice.choices, default=StatusChoice.NOT_STARTED
     )
-    is_complete = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     due_date = models.DateField(default=now().today())
+    author = models.ForeignKey(User, on_delete=models.CASCADE, related_name="tasks")
+
+    @property
+    def is_complete(self):
+        return self.status == StatusChoice.COMPLETE
 
     def __str__(self):
         return self.title
