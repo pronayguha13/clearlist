@@ -1,10 +1,10 @@
 import { createContext, useContext } from "react";
-import { type LoginCredentials } from "../types/Auth";
+import { type LoginCredentials, type UserDetail } from "../types/Auth";
 type IAuth = {
   isAuthenticated: boolean;
   login: (credential: LoginCredentials) => Promise<void>
   logout: () => void;
-  register: () => void;
+  register: (credential: UserDetail) => Promise<void>;
 }
 
 const initAuthState: IAuth = {
@@ -16,7 +16,7 @@ const initAuthState: IAuth = {
     // throw new Error("logout method not yet implemented")
   },
   register: () => {
-    // throw new Error("register method not yet implemented")
+    throw new Error("register method not yet implemented")
   },
 }
 

@@ -12,7 +12,7 @@ class UserSerializer(serializers.ModelSerializer):
 
 class TaskSerializer(serializers.ModelSerializer):
     due_date = serializers.SerializerMethodField()
-    is_completed = serializers.SerializerMethodField(read_only=True)
+    is_completed = serializers.SerializerMethodField()
     author = UserSerializer(read_only=True)
 
     class Meta:
@@ -22,8 +22,10 @@ class TaskSerializer(serializers.ModelSerializer):
 
     def get_due_date(self, instance):
         if instance.due_date:
-            dt = datetime.combine(instance.due_date, datetime.min.time(), tzinfo=timezone.utc)
-            return dt.isoformat(timespec='seconds')
+            dt = datetime.combine(
+                instance.due_date, datetime.min.time(), tzinfo=timezone.utc
+            )
+            return dt.isoformat(timespec="seconds")
         return None
 
     def get_is_completed(self, obj):

@@ -3,8 +3,10 @@ import style from "./style.module.css";
 import { NAV_MENU_ITEMS } from "../../types";
 import { Icon } from "@iconify/react";
 import SearchInput from "../../components/SearchInput";
+import useAuthContext from "../../context/AuthContext";
 
 const HeaderContainer = () => {
+  const { logout } = useAuthContext()
   const location = useLocation();
 
 
@@ -53,11 +55,8 @@ const HeaderContainer = () => {
             <Icon icon="lsicon:calendar-outline" width="24" height="24" />
           </button>
         </div>
-        <div className={style.todays_date}>
-          <p>Today</p>
-          <p>{new Date().toLocaleDateString("en-GB")}</p>
-        </div>
       </div>
+      <button onClick={logout}> <Icon icon="mingcute:exit-line" width="24" height="24" /></button>
     </div>
   );
 };

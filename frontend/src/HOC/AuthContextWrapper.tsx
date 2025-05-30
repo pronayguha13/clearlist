@@ -1,12 +1,12 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router";
 import { AuthContext } from "../context/AuthContext";
-import { login } from "../services/api";
-import type { LoginCredentials } from "../types/Auth";
+import { login, register } from "../services/api";
+import type { LoginCredentials, UserDetail } from "../types/Auth";
 
 const AuthContextWrapper = ({ children }: ContextWrapperProps) => {
   const navigate = useNavigate();
-  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(localStorage.getItem("accessToken") ? true : false);
 
   const loginHandler = async (credential: LoginCredentials) => {
     try {
@@ -27,17 +27,30 @@ const AuthContextWrapper = ({ children }: ContextWrapperProps) => {
   }
 
   const logoutQuery = () => {
-    localStorage.removeItem("accessToken")
-    localStorage.removeItem("refreshToken")
+    console.log("Logging out...")
+    localStorage.removeItem("accessToken");
+    localStorage.removeItem("refreshToken");
+    navigate("/login")
+  }
+
+
+  const registerHandler = async (credential: UserDetail) => {
+    try {
+      const response = await register(credential);
+      console.log('🚀 ~ registerHandler ~ response:', response)
+
+      if (response) {
+        navigate("/login")
+      }
+    } catch (error) {
+      window.alert("Failed to register user")
+    }
   }
   useEffect(() => {
     const accessToken = localStorage.getItem("accessToken");
+    console.log('🚀 ~ useEffect ~ accessToken:', accessToken)
 
-    if (accessToken) {
-      setIsAuthenticated(true)
-    } else {
-      setIsAuthenticated(false)
-    }
+    accessToken && accessToken.length ? setIsAuthenticated(true) : setIsAuthenticated(false);
 
   }, [window.location.pathname])
 
@@ -47,7 +60,7 @@ const AuthContextWrapper = ({ children }: ContextWrapperProps) => {
       isAuthenticated: isAuthenticated,
       login: loginHandler,
       logout: logoutQuery,
-      register: () => console.log("Register user")
+      register: registerHandler
     }}>
       {children}
     </AuthContext.Provider>

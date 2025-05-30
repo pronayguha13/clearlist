@@ -2,15 +2,17 @@ import { useState, useMemo } from "react";
 import Form from "../../../components/Form"
 import { FormFields } from "../../../types/FormTypes";
 import useAuthContext from "../../../context/AuthContext";
+import { useNavigate } from "react-router";
 const Login = () => {
   const { login } = useAuthContext();
+  const navigate = useNavigate();
   const [username, setUserName] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   //  const [email, setEmail] = useState<string>("");
 
 
 
-  const onClickRegister = () => console.log("Clicked on register")
+  const onClickRegister = () => navigate("/register")
 
   const handleLogin = () => {
     console.log("Submit button clicked");
