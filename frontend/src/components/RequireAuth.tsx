@@ -1,12 +1,12 @@
 // /components/RequireAuth.jsx
 import { Navigate, useLocation } from "react-router";
-import useAuth from "../hooks/useAuth";
-
+import useAuthContext from "../context/AuthContext";
 const RequireAuth = ({ children }: ContainerComponentProps) => {
-  const { isAuthenticated } = useAuth(); // your own auth logic
   const location = useLocation();
+  const { isAuthenticated } = useAuthContext()
+  console.log('🚀 ~ RequireAuth ~ isAuthenticated:', isAuthenticated)
 
-  if (!!isAuthenticated) {
+  if (!isAuthenticated) {
     return <Navigate to="/login" state={{ from: location }} replace />;
   }
 
