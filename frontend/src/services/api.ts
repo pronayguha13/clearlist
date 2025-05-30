@@ -71,3 +71,9 @@ export const register = async (credential: UserDetail) => {
   const response = await customInstance.post("/register/", credential)
   return response.data;
 }
+
+export const getUserProfile = async () => {
+  const response = await customInstance.get("/user/")
+
+  return response.data;
+}
