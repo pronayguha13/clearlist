@@ -3,6 +3,7 @@
 
 import customInstance from "../hooks/useAxiosInterceptor"
 import type { ITODO, PriorityValue } from "../types";
+import type { LoginCredentials } from "../types/Auth";
 
 export const fetchAllTODO = async () => {
   const response = await customInstance.get("/todos/");
@@ -57,6 +58,13 @@ export const searchTask = async (queryString: string) => {
 
 
   const response = await customInstance.get(`/todos/search-tasks?${queryParams}`);
+
+  return response.data;
+}
+
+export const login = async (credentials: LoginCredentials) => {
+  const response = await customInstance.post("/login/", credentials)
+  console.log('🚀 ~ login ~ response:', response)
 
   return response.data;
 }

@@ -17,7 +17,6 @@ const AppRoutes = () => {
       <Route path="/register" element={<Register />} />
       {/* public routes */}
       {/* private routes */}
-      <Route index element={<Navigate to="/dashboard" />} />
       <Route
         element={
           <RequireAuth>
@@ -25,6 +24,7 @@ const AppRoutes = () => {
           </RequireAuth>
         }
       >
+        <Route index element={<Navigate to="/dashboard" />} />
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/tasks">
           <Route index element={<Tasks />} />

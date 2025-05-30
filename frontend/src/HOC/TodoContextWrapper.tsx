@@ -4,13 +4,17 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { createTODO, deleteTODO, fetchAllTODO, fetchTODOByID, getTaskStatus, getVitalTODOs, searchTask } from "../services/api";
 import type { AxiosError } from "axios";
 import type { TaskStatus } from "../types/Todo";
+import { useEffect } from "react";
+import useAuthContext from "../context/AuthContext";
 const TodoContextWrapper = ({ children }: ContextWrapperProps) => {
+  const { isAuthenticated } = useAuthContext()
   const queryClient = useQueryClient();
   // query to fetch all the todo
-  const { data: todos } = useQuery<Array<ITODO>>({
+  const { data: todos, refetch } = useQuery<Array<ITODO>>({
     queryKey: ["todos"],
     queryFn: fetchAllTODO,
-    initialData: []
+    initialData: [],
+    enabled: false
   })
 
   const createTODOMutation = useMutation<ITODO, AxiosError, Omit<ITODO, 'id' | 'createdAt' | 'updatedAt' | "isCompleted">, unknown
@@ -73,24 +77,9 @@ const TodoContextWrapper = ({ children }: ContextWrapperProps) => {
   }
   /*----------------*/
 
-
-  // const { isLoading, data, error } = useQuery<ITODO[]>({
-  //   queryKey: ["todos"], queryFn: async () => {
-  //     const res = await axios.get<ITODO[]>(`${import.meta.env.VITE_API_URL}/todos`);
-  //     return res.data ?? [];
-  //   }
-  // })
-
-
-  // const fetchTODOByID = (todoID: number): Partial<UseQueryResult> => {
-  //   const { isFetching, data, refetch } = useQuery<ITODO | null>({
-  //     queryKey: ["todo", todoID],
-  //     queryFn: () => getTodoByID(todoID),
-  //     enabled: false
-  //   })
-
-  //   return { isFetching, data, refetch }
-  // }
+  useEffect(() => {
+    if (isAuthenticated) refetch()
+  }, [isAuthenticated])
 
   /*----------------*/
   return (
